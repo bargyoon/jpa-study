@@ -13,6 +13,21 @@ public class RentController {
 	public void returnBook(String rbIdx) {
 		rentService.returnBook(rbIdx);
 	}
+
+	public List<Rent> searchRentList(String userId) {
+		
+		return rentService.findRentByUserId(userId);
+	}
+
+	public Boolean returnBook(Long rmIdx) {
+		return rentService.returnBook(rmIdx);
+		
+	}
+
+	public Boolean extensionRentBook(Long rbIdx) {
+		return rentService.extensionRentBook(rbIdx);
+		
+	}
 	
 	
 	

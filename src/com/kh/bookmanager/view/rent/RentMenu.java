@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kh.bookmanager.rent.Rent;
+import com.kh.bookmanager.rent.RentBook;
 import com.kh.bookmanager.rent.RentController;
 
 public class RentMenu {
@@ -48,29 +50,63 @@ public class RentMenu {
 					}else {
 						System.out.println("에러가 발생해 도서 대출에 실패했습니다.");
 					}
-				
+				break;
 			case 2: //반납할 대출도서번호(rbIdx)를 입력받아
 					//해당 rbIdx의 대출도서를 반납처리
 				System.out.print("반납할 도서 대출번호를 입력하세요 : ");
-				rentController.returnBook(sc.next());
+				
+				if(rentController.returnBook(sc.nextLong())) {
+					System.out.println("반납에 성공했습니다");
+				}else {
+					System.out.println("반납에 실패했습니다.");
+				}
 				
 				
 				break;
 				
 			case 3: //연장할 대출도서번호(rbIdx)를 입력받아
 					//해당 rbIdx의 대출도서를 연장처리 
+				System.out.println("연장할 대출도서번호를 입력하세요 : ");
+				if(rentController.extensionRentBook(sc.nextLong())) {
+					System.out.println("연장에 성공했습니다.");
+				}else {
+					System.out.println("연장에 실패했습니다.");
+				}
 				break;
 				
 			case 4: //대출건을 조회할 사용자의 아이디를 입력받아
 					//rentController 의 searchRentList 메서드 호출
-				 
+					sc.nextLine();
+					System.out.print("아이디를 입력하세요 : ");
+				 	userId = sc.nextLine();
+				 	
+				 	List<Rent> rents = rentController.searchRentList(userId);
+					
+				 	rents.stream().forEach(e -> System.out.println(e));
+				 	
+				 	System.out.print("상세조회할 대출건이 존재합니까? : ");
+				 	String input = sc.nextLine();
+				 	
+				 	if(input.equalsIgnoreCase("y")) {
+				 		System.out.print("상세조회할 대출도서번호를 입력하세요. : ");
+				 		Long rmIdx = sc.nextLong();
+				 		sc.nextLine(); //버퍼날림
+				 		
+				 		Rent matchedRent = rents.stream()
+				 				.filter(e -> e.getRmIdx().equals(rmIdx))
+				 				.findFirst().get();
+				 		
+				 		matchedRent.getRentBooks().stream().forEach(e ->
+				 			System.out.println(e)
+				 		);
+
+				 	}
 					//반환 받은 rentList를 출력
 					//대출건 목록을 출력한 다음
 					//사용자에게 대출건 상세 조회여부를 물어
 				    //사용자가 대출건 상세 조회를 하겠다고 하면
 				    //상세 조회할 대출건 번호를 입력받고
 				    //해당 대출건의 대출도서 목록을 출력
-				    //출력 내용 : rmIdx, rbIdx, bIdx, 도서명, 반납일자, 반납여부
 				
 				break;
 			case 5: return;

@@ -1,5 +1,8 @@
 package com.kh.bookmanager.rent;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +14,9 @@ import com.kh.bookmanager.common.jpaTemplate.JpaTemplate;
 import com.kh.bookmanager.member.Member;
 
 public class RentService {
-
+	
+	private RentRepository rentRepository = new RentRepository();
+	
 	public void returnBook(String rbIdx) {
 		// TODO Auto-generated method stub
 		
@@ -42,12 +47,13 @@ public class RentService {
 			for (Book book : books) {
 				RentBook rentBook = new RentBook();
 				rentBook.setBook(book);
+				rentBook.setState("대출");
 				rentBooks.add(rentBook);
 				
 			}
 			
 			rent.setMember(member);
-			rent.setRentBooks(rentBooks);
+			rent.changeRentBooks(rentBooks);
 			rent.setTitle(title);
 			rent.setRentBookCnt(rentBooks.size());
 			em.persist(rent);
@@ -62,8 +68,68 @@ public class RentService {
 		
 		return false;
 	}
+
+	public List<Rent> findRentByUserId(String userId) {
+		
+		EntityManager em = JpaTemplate.createEntityManager();
+		List<Rent> rents = new ArrayList<Rent>();
+		try {
+			rents = rentRepository.findRentByUserId(em,userId);
+		} finally {
+			em.close();
+		}
+		
+		return rents;
+	}
 	
-	
+	public Boolean returnBook(Long rmIdx) {
+		EntityManager em = JpaTemplate.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		try {
+			RentBook rentBook = em.find(RentBook.class, rmIdx);
+			rentBook.setState("반납");
+			rentBook.setReturnDate(LocalDateTime.now());
+			if(rentBook.getRent().getRentBooks().stream().allMatch(e -> e.getState().equals("반납"))) {
+				rentBook.getRent().setIsReturn(true);
+			}
+			tx.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		}finally {
+			em.close();
+		}
+		
+		return false;
+	}
+
+	public Boolean extensionRentBook(Long rbIdx) {
+		EntityManager em = JpaTemplate.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		try {
+			RentBook rentBook = em.find(RentBook.class, rbIdx);
+			if(rentBook.getState().equals("반납")) {
+				return false;
+			}
+			rentBook.setState("연장");
+			rentBook.setExtensionCnt(rentBook.getExtensionCnt()+1);
+			rentBook.setReturnDate(rentBook.getReturnDate().plusDays(7));
+			rentBook.getReturnDate().
+			
+			tx.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		}finally {
+			em.close();
+		}
+		
+		return false;
+	}
 	
 	
 }
