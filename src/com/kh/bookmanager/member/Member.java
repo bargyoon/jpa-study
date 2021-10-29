@@ -49,7 +49,7 @@ public class Member {
 	@Column(columnDefinition = "date default sysdate")
 	private Date regDate;
 	@Column(columnDefinition = "number default 0")
-	private boolean isLeave;
+	private Boolean isLeave;
 	
 	
 }

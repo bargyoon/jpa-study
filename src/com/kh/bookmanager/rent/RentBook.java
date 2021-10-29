@@ -24,7 +24,7 @@ public class RentBook {
 	
 	@Id
 	@GeneratedValue
-	private long rbIdx;
+	private Long rbIdx;
 	
 	@ManyToOne
 	@JoinColumn(name="bkIdx")
@@ -37,7 +37,7 @@ public class RentBook {
 	@Column(columnDefinition = "date default sysdate+7")
 	private Date returnDate;
 	@Column(columnDefinition = "number default 0")
-	private int extensionCnt;
+	private Integer extensionCnt;
 	
 
 }

@@ -21,18 +21,18 @@ public class Book {
 	
 	@Id
 	@GeneratedValue //JPA정책에 따라서 식별자를 자동 생성
-	private long bkIdx;
+	private Long bkIdx;
 	private String isbn;
 	private String category;
 	private String title;
 	private String author;
 	private String info;
 	@Column(columnDefinition = "number default 1")
-	private int bookAmt;
+	private Integer bookAmt;
 	@Column(columnDefinition = "date default sysdate")
 	private Date regDate;
 	@Column(columnDefinition = "number default 0")
-	private int rentCnt;
+	private Integer rentCnt;
 	
 	
 	
