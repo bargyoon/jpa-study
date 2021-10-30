@@ -117,8 +117,7 @@ public class RentService {
 			rentBook.setState("연장");
 			rentBook.setExtensionCnt(rentBook.getExtensionCnt()+1);
 			rentBook.setReturnDate(rentBook.getReturnDate().plusDays(7));
-			rentBook.getReturnDate().
-			
+			rentBook.getReturnDate();
 			tx.commit();
 			return true;
 		} catch (Exception e) {
