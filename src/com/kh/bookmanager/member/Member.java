@@ -36,6 +36,7 @@ import lombok.Data;
 @DynamicInsert //insert쿼리를 생성할 때 값이 null인 필드는 쿼리에서 생략
 @DynamicUpdate //update쿼리를 생성할 때 변경이 감지되지 않은 필드는 쿼리에서 생략
 
+
 public class Member {	
 	
 	@Id

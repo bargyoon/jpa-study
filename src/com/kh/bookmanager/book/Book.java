@@ -18,6 +18,7 @@ import lombok.Data;
 @DynamicInsert
 public class Book {
 	
+	
 	@Id
 	@GeneratedValue //JPA정책에 따라서 식별자를 자동 생성
 	private Long bkIdx;
